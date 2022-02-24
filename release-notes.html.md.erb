@@ -1,0 +1,87 @@
+---
+title: Release Notes for Cloud Service Broker for AWS
+owner: Cloud Service Broker
+---
+
+<strong><%= modified_date %></strong>
+
+These are release notes for <%= vars.product_full %>.
+
+##<a id="1-1-2"></a> v1.1.2
+
+**Release Date:** February 22, 2022
+
+### Features
+
+New features and changes in this release:
+
+* **Provision and update operations alert you if you attempt to override plan defined properties:**
+The attempt now returns an error. Previously these commands would accept the
+property change request, but override your change with the plan defined value.
+
+* **Validation of parameters:** When additional JSON parameters are supplied as part of a `cf create-service`,
+`cf update-service`, `cf bind-service`, or `cf create-service-key`, they are now validated against the list of
+supported parameters. The operation fails with an error if a parameter is unknown.
+
+### Resolved Issues
+
+This release has the following fixes:
+
+* **Parameters now persist through multiple updates:** Parameters sent when updating a
+service are stored, and do not need to be sent again in subsequent updates.
+
+### Known Issues
+
+This release has the following issues:
+
+* **PostgreSQL instances cannot be moved to smaller plans:** Because of a limitation with Amazon RDS for
+  PostgreSQL, instance plans cannot be changed to smaller plans.
+  For example, when using a `cf update-service -p` command.
+  This restriction also applies to subsumed PostgreSQL instances.
+  Updates to a PostgreSQL instance fail if they attempt an update that decreases `storage_gb`.
+  For information about decreasing the total provisioned storage size of an Amazon RDS database instance,
+  see the [AWS documentation](https://aws.amazon.com/premiumsupport/knowledge-center/rds-db-storage-size/).
+
+
+##<a id="1-1-1"></a> v1.1.1
+
+**Release Date:** November 19, 2021
+
+### Features
+
+New features and changes in this release:
+
+* **Support for encryption of sensitive data:** <%= vars.product_short %> can now encrypt sensitive
+data that is provided or generated during provisioning and binding and stored in the state database.
+A key generated from the password you configure in the tile is used for the encryption.
+For how to configure encryption, see <a href="installing-with-aws.html#state-db">Configure a State Database</a>.
+
+### Resolved Issues
+
+This release has the following fixes:
+
+* **Use restricted user to connect to CredHub:** The broker uses `cf.uaa.services_credhub_credentials`
+instead of `cf.uaa.credhub_admin_client_client_credentials` to communicate with CredHub.
+The new credentials have restricted access.
+
+### Known Issues
+
+This release has the following issues:
+
+* **PostgreSQL instances cannot be moved to smaller plans:** Because of a limitation with Amazon RDS for
+  PostgreSQL, instance plans cannot be changed to smaller plans.
+  For example, when using a `cf update-service -p` command.
+  This restriction also applies to subsumed PostgreSQL instances.
+  Updates to a PostgreSQL instance fail if they attempt an update that decreases `storage_gb`.
+  For information about decreasing the total provisioned storage size of an Amazon RDS database instance,
+  see the [AWS documentation](https://aws.amazon.com/premiumsupport/knowledge-center/rds-db-storage-size/).
+
+* **Parameters specified during service instance updates are not persisted by subsequent updates:**
+If you update a service instance and change a parameter,
+then the next time that you update the service instance, you must specify the same parameter again.
+Otherwise, the parameters revert to the values that they had when the service instance was created.
+
+## <a id="view"></a> View Release Notes for Another Version
+
+To view the release notes for another product version, select the version from
+dropdown at the top of this page.
